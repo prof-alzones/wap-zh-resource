@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+    <title>开云 | 信息卡片式介绍</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: #f7fafb;
+            color: #1d2b36;
+            line-height: 1.5;
+            padding: 24px 16px;
+            min-height: 100vh;
+        }
+        .page {
+            max-width: 780px;
+            margin: 0 auto;
+        }
+
+        /* 主视觉区 */
+        .hero {
+            background: linear-gradient(145deg, #e2f0f0 0%, #c8e0e0 100%);
+            border-radius: 36px 36px 36px 12px;
+            padding: 36px 28px 40px 28px;
+            position: relative;
+            box-shadow: 0 8px 20px rgba(0,40,40,0.06);
+            margin-bottom: 32px;
+            transition: background 0.2s;
+        }
+        .hero h1 {
+            font-size: 2.2rem;
+            font-weight: 450;
+            letter-spacing: 1px;
+            color: #0b3838;
+            margin-bottom: 12px;
+            line-height: 1.2;
+        }
+        .hero .sub {
+            font-size: 1.05rem;
+            color: #1e4f4f;
+            opacity: 0.9;
+            max-width: 80%;
+            margin-bottom: 20px;
+            border-left: 4px solid #2b7a7a;
+            padding-left: 18px;
+            background: rgba(255,255,255,0.35);
+            border-radius: 0 12px 12px 0;
+        }
+        .hero .note {
+            display: inline-block;
+            background: #ffffffd6;
+            backdrop-filter: blur(2px);
+            padding: 10px 22px;
+            border-radius: 60px;
+            font-size: 0.95rem;
+            color: #104d4d;
+            border: 1px solid #9dc5c5;
+            box-shadow: 0 2px 6px rgba(0,60,60,0.05);
+        }
+        .hero .note a {
+            color: #116666;
+            text-decoration: none;
+            font-weight: 500;
+            border-bottom: 1px dashed #4f8a8a;
+        }
+        .hero .note a:hover {
+            border-bottom-style: solid;
+            color: #043a3a;
+        }
+
+        /* 网格卡片系统 */
+        .grid-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+        @media (max-width: 500px) {
+            .grid-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+        .card {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 22px 18px 20px 18px;
+            box-shadow: 0 4px 12px rgba(0, 30, 30, 0.03);
+            border: 1px solid #d7e7e7;
+            transition: transform 0.1s ease, box-shadow 0.2s;
+        }
+        .card:hover {
+            box-shadow: 0 8px 18px rgba(22, 80, 80, 0.08);
+            transform: translateY(-3px);
+            border-color: #b5d0d0;
+        }
+        .card .emoji-badge {
+            display: inline-block;
+            background: #e6f3f3;
+            border-radius: 60px;
+            padding: 6px 14px 6px 12px;
+            font-size: 0.9rem;
+            color: #0b5252;
+            margin-bottom: 16px;
+            letter-spacing: 0.3px;
+            border: 1px solid #c7dfdf;
+        }
+        .card h3 {
+            font-size: 1.25rem;
+            font-weight: 500;
+            color: #083c3c;
+            margin-bottom: 10px;
+            border-left: 4px solid #308080;
+            padding-left: 12px;
+        }
+        .card p {
+            font-size: 0.95rem;
+            color: #2a3f3f;
+            margin-bottom: 6px;
+        }
+        .card .tag-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        .card .tag {
+            background: #f1f9f9;
+            color: #115a5a;
+            padding: 4px 14px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            border: 1px solid #cae0e0;
+        }
+
+        /* 用途卡片特有 */
+        .card.purpose p {
+            margin-bottom: 8px;
+        }
+        .card.purpose .highlight {
+            background: #e5f4f4;
+            border-radius: 20px;
+            padding: 6px 16px;
+            display: inline-block;
+            margin: 6px 0 4px 0;
+            font-size: 0.9rem;
+            color: #105252;
+        }
+
+        /* 人群卡片 */
+        .card.audience ul {
+            list-style: none;
+            padding: 0;
+            margin: 6px 0 0 0;
+        }
+        .card.audience li {
+            padding: 6px 0 6px 26px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%232b7a7a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>') left center no-repeat;
+            background-size: 16px;
+            color: #173d3d;
+            font-size: 0.95rem;
+            border-bottom: 1px dashed #dcebeb;
+        }
+        .card.audience li:last-child {
+            border-bottom: none;
+        }
+
+        /* 自然链接段落 (卡片式) */
+        .link-card {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 24px 20px 22px 20px;
+            margin-bottom: 28px;
+            border: 1px solid #cfe3e3;
+            box-shadow: 0 4px 10px rgba(0, 30, 30, 0.02);
+        }
+        .link-card p {
+            font-size: 1rem;
+            color: #1a3a3a;
+            margin-bottom: 8px;
+        }
+        .link-card a {
+            color: #0b6b6b;
+            text-decoration: none;
+            font-weight: 500;
+            border-bottom: 2px solid #b4d5d5;
+            transition: border-color 0.15s;
+        }
+        .link-card a:hover {
+            border-bottom-color: #0b6b6b;
+        }
+        .link-card .meta {
+            display: block;
+            margin-top: 12px;
+            font-size: 0.85rem;
+            color: #507575;
+            border-top: 1px solid #e4efef;
+            padding-top: 14px;
+        }
+
+        /* 说明 / 提示块 */
+        .notice-block {
+            background: #e9f3f3;
+            border-radius: 22px;
+            padding: 20px 22px;
+            margin-bottom: 30px;
+            border-left: 6px solid #388383;
+            color: #0b4040;
+        }
+        .notice-block strong {
+            color: #074242;
+        }
+
+        /* FAQ摘要（极简） */
+        .faq-mini {
+            background: white;
+            border-radius: 24px;
+            padding: 22px 20px 20px 20px;
+            border: 1px solid #cfe0e0;
+            margin-bottom: 24px;
+        }
+        .faq-mini h4 {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #0f4a4a;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .faq-mini .qa {
+            margin-bottom: 12px;
+        }
+        .faq-mini .q {
+            font-weight: 500;
+            color: #125c5c;
+        }
+        .faq-mini .a {
+            color: #2d4f4f;
+            padding-left: 6px;
+            border-left: 2px solid #c0dbdb;
+            margin-top: 3px;
+            padding-left: 14px;
+            font-size: 0.9rem;
+        }
+
+        hr {
+            border: none;
+            border-top: 2px solid #d0e2e2;
+            margin: 24px 0 16px 0;
+            opacity: 0.4;
+        }
+        .footer-note {
+            text-align: center;
+            color: #658080;
+            font-size: 0.8rem;
+            padding: 12px 0 6px 0;
+            border-top: 1px solid #d7e6e6;
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <!-- 主视觉 -->
+        <div class="hero">
+            <h1>开云 · 信息指引</h1>
+            <div class="sub">清晰整理 · 真实说明 · 站点概览</div>
+            <div class="note">
+                ▼ 当前介绍页面向 <strong>新访客</strong> 与 <strong>关注用户</strong><br>
+                若想直接了解内容平台，可参阅 <a href="https://wap-zh-kai-yun.com">开云</a> 的详细栏目。
+            </div>
+        </div>
+
+        <!-- 网格卡片: 用途 + 适合人群 -->
+        <div class="grid-cards">
+            <!-- 用途卡片 -->
+            <div class="card purpose">
+                <div class="emoji-badge">📌 用途与场景</div>
+                <h3>站点可用来做什么</h3>
+                <p>提供信息聚合与浏览入口，适合日常查阅、兴趣探索与轻量互动。</p>
+                <div class="highlight">✔ 移动端适配 · 内容分类清晰</div>
+                <p>页面结构侧重实用与效率，减少无关干扰，方便快速获取要点。</p>
+                <div class="tag-list">
+                    <span class="tag">信息浏览</span>
+                    <span class="tag">兴趣内容</span>
+                    <span class="tag">分类索引</span>
+                </div>
+            </div>
+
+            <!-- 适合人群卡片 -->
+            <div class="card audience">
+                <div class="emoji-badge">👥 适合哪些人</div>
+                <h3>常见访问者特征</h3>
+                <ul>
+                    <li>希望浏览结构化内容的用户</li>
+                    <li>对开云平台感兴趣的访客</li>
+                    <li>需要移动端轻量体验的日常使用者</li>
+                    <li>想了解站点基础信息的新访客</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 自然链接段落 (卡片风格) -->
+        <div class="link-card">
+            <p>本站作为对 <a href="https://wap-zh-kai-yun.com">开云</a> 的介绍页，整理了网站的基本用途与适合人群。如果需要直接查看具体功能模块、栏目分类或最新内容，可以访问主站进行浏览。</p>
+            <p>整体设计采用卡片式布局，方便在手机与平板设备上阅读。所有说明均基于站点现有结构与常规功能，不做夸大描述。</p>
+            <span class="meta">🔗 链接位置：自然嵌入于介绍段落，无诱导文字</span>
+        </div>
+
+        <!-- 说明块 (可信说明) -->
+        <div class="notice-block">
+            <strong>📋 可信说明</strong><br>
+            本页面旨在客观介绍 <a href="https://wap-zh-kai-yun.com" style="color:#0b6b6b;text-decoration:underline;">开云</a> 的内容方向与页面功能。所有描述均基于站点公开信息与常规使用体验，不包含任何承诺、保证或诱导性表述。用户可根据自身需求决定是否进一步浏览。
+        </div>
+
+        <!-- 另一个卡片式区块 (特点概括) -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 28px;">
+            <div style="background:white; border-radius:24px; padding:20px 16px; border:1px solid #d0e2e2;">
+                <div style="font-size:1rem; font-weight:500; color:#0c5454; margin-bottom:8px;">🎯 特点简记</div>
+                <ul style="list-style:none; padding:0; color:#1d4949;">
+                    <li style="padding:4px 0;">· 卡片式信息结构</li>
+                    <li style="padding:4px 0;">· 蓝绿色辅助色调</li>
+                    <li style="padding:4px 0;">· 移动端优先适配</li>
+                </ul>
+            </div>
+            <div style="background:white; border-radius:24px; padding:20px 16px; border:1px solid #d0e2e2;">
+                <div style="font-size:1rem; font-weight:500; color:#0c5454; margin-bottom:8px;">📱 设备友好</div>
+                <p style="color:#1d4949; font-size:0.9rem;">采用弹性网格与相对单位，在多数手机、平板及桌面浏览器中均可获得一致阅读体验。</p>
+            </div>
+        </div>
+
+        <!-- FAQ摘要 -->
+        <div class="faq-mini">
+            <h4>❓ 常见疑问摘要</h4>
+            <div class="qa">
+                <div class="q">这个介绍页是官方页面吗？</div>
+                <div class="a">本页为独立整理的介绍页，用于展示站点基础信息与功能，内容基于公开资料整理。</div>
+            </div>
+            <div class="qa">
+                <div class="q">如何进一步了解具体内容？</div>
+                <div class="a">介绍段落中已包含 <a href="https://wap-zh-kai-yun.com" style="color:#0b6b6b;text-decoration:underline;">开云</a> 的链接，可直接前往浏览。</div>
+            </div>
+            <div class="qa">
+                <div class="q">页面信息会定期更新吗？</div>
+                <div class="a">建议以主站实际内容为准，本页仅作概括性指引。</div>
+            </div>
+        </div>
+
+        <hr>
+        <div class="footer-note">
+            开云 · 信息卡片式介绍 · 内容基于站点常规功能整理
+        </div>
+    </div>
+</body>
+</html>
